@@ -26,7 +26,6 @@ function calculateSalesTax(salesData, taxRates) {
   var results = {};
   for(var instance in companySalesData) {
     var data = companySalesData[instance];
-    console.log(data.province + ': ' + taxRates[data.province]);
     if(results[data.name] === undefined) {
       results[data.name] = {
         totalSales : calculateTotalSales(data.sales),
@@ -34,7 +33,7 @@ function calculateSalesTax(salesData, taxRates) {
       };
     } else {
       results[data.name].totalSales += calculateTotalSales(data.sales);
-      results[data.name].totalTaxes += calculateTotalTax(data.sales);
+      results[data.name].totalTaxes += calculateTotalTax(data.sales, taxRates[data.province]);
     }
   }
   return results;
@@ -45,7 +44,6 @@ function calculateTotalSales(sales) {
 }
 
 function calculateTotalTax(sales, taxRate) {
-  // console.log(taxRate);
   return sales.reduce(add, 0) * taxRate;
 }
 
@@ -53,7 +51,7 @@ function add(a, b) {
   return a + b;
 }
 var results = calculateSalesTax(companySalesData, salesTaxRates);
-console.log(results);
+
 /* Expected Results:
 {
   Telus: {
